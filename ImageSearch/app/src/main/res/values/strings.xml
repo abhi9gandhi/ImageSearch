@@ -2,7 +2,7 @@
     <string name="app_name">ImageSearch</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="action_share">Settings</string>
+    <string name="action_share">Share</string>
     <string name="imageTitle">Title</string>
     <string name="title_activity_image_full_screen">ImageFullScreen</string>
     <string name="title_activity_image_settings">ImageSettings</string>

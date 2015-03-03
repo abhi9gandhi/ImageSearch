@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.codepath.imagesearch.Model.ImageResult;
 import com.codepath.imagesearch.R;
+import com.codepath.imagesearch.TouchImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -28,9 +29,12 @@ public class ImageFullScreen extends ActionBarActivity {
         setContentView(R.layout.activity_image_full_screen);
        // getSupportActionBar().hide();
         ImageResult item = (ImageResult)getIntent().getSerializableExtra("imageitem");
+
         ImageView fullPhoto = (ImageView)findViewById(R.id.IvFullImage);
+        TouchImageView fulltouchphoto = (TouchImageView) findViewById(R.id.TivImage);
         fullPhoto.setImageResource(0);
-        Picasso.with(this).load(item.fullurl).into(fullPhoto);
+        //Picasso.with(this).load(item.fullurl).into(fullPhoto);
+        Picasso.with(this).load(item.fullurl).into(fulltouchphoto);
     }
 
     // Returns the URI path to the Bitmap displayed in specified ImageView
@@ -78,7 +82,8 @@ public class ImageFullScreen extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_share) {
-            ImageView ivImage = (ImageView) findViewById(R.id.IvFullImage);
+          //  ImageView ivImage = (ImageView) findViewById(R.id.IvFullImage);
+            ImageView ivImage = (ImageView) findViewById(R.id.TivImage);
             // Get access to the URI for the bitmap
             Uri bmpUri = getLocalBitmapUri(ivImage);
             if (bmpUri != null) {

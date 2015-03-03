@@ -1,10 +1,13 @@
 package com.codepath.imagesearch.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
@@ -18,12 +21,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.support.v7.widget.SearchView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.codepath.imagesearch.Adaptor.ImageResultAdoptor;
 import com.codepath.imagesearch.EndlessScrollListener;
+import com.codepath.imagesearch.Model.ImagePage;
 import com.codepath.imagesearch.Model.ImageResult;
 import com.codepath.imagesearch.Model.ImageSetting;
 import com.codepath.imagesearch.R;
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -42,8 +48,11 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
     private ArrayList<ImageResult> ImageResultArray;
     private ImageResult result;
+    private ArrayList<ImagePage> apage;
+    JSONArray pageArray;
     private ImageResultAdoptor aresult;
-    private GridView grid;
+  //  private GridView grid;
+    private StaggeredGridView grid;
     private ImageSetting settings;
     private String searchQuery;
 
@@ -58,7 +67,8 @@ public class MainActivity extends ActionBarActivity {
         ImageResultArray = new ArrayList<ImageResult>();
         aresult = new ImageResultAdoptor(this,ImageResultArray);
 
-        grid = (GridView)findViewById(R.id.GvImageGrid);
+       // grid = (GridView)findViewById(R.id.GvImageGrid);
+        grid = (StaggeredGridView)findViewById(R.id.GvStaggeredGridView);
         grid.setAdapter(aresult);
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,8 +97,21 @@ public class MainActivity extends ActionBarActivity {
         // This method probably sends out a network request and appends new data items to your adapter.
         // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
         // Deserialize API response and then construct new objects to append to the adapter
-       // String ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchQuery + "&rsz=8 &start=" + ImageResultArray.get(0).start;
-        String ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchQuery + "&rsz=8";
+
+        String ImageUrl = null;
+        try {
+            if (offset >= 8) {
+                return;
+            }
+            if (pageArray.getJSONObject(offset) != null && pageArray.getJSONObject(offset).getString("start") != null) {
+                ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchQuery + "&rsz=8&start=" + pageArray.getJSONObject(offset).getString("start");
+            } else {
+                ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchQuery + "&rsz=8&start=";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // String ImageUrl = "https://ajax.googleapis.com/ajax/services/ßßß/images?v=1.0&q=" + searchQuery + "&rsz=8";
         fetchImages(ImageUrl);
     }
 
@@ -119,8 +142,11 @@ public class MainActivity extends ActionBarActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("DEBUG,", response.toString());
                 try {
-                    aresult.clear();
+                    if (response != null && response.getInt("responseStatus") == 200 ) {
+                    pageArray = response.getJSONObject("responseData").getJSONObject("cursor").getJSONArray("pages");
+                   // aresult.clear();
                     aresult.addAll(ImageResult.getArrayFromJson(response.getJSONObject("responseData")));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -181,6 +207,26 @@ public class MainActivity extends ActionBarActivity {
         return bmpUri;
     }
 
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public Boolean isOnline() {
+        try {
+            Process p1 = java.lang.Runtime.getRuntime().exec("ping -n 1 www.google.com");
+            int returnVal = p1.waitFor();
+            boolean reachable = (returnVal==0);
+            return reachable;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -190,6 +236,11 @@ public class MainActivity extends ActionBarActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+              //  if (isNetworkAvailable() == false ||  isOnline() == false) {
+              //      Toast.makeText(getApplicationContext(),"Network Not Available !!!",
+              //              Toast.LENGTH_LONG).show();
+              //      return false;
+              //  }
                 searchQuery = new String(query);
                 String ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query + "&rsz=8";
                // String ImageUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query;
@@ -217,6 +268,8 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this,ImageSettings.class);
+            aresult.clear();
+            i.putExtra("settings",settings);
             startActivityForResult(i, 1);
 
             return true;

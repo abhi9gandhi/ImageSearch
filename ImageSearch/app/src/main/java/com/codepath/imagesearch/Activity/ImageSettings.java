@@ -13,10 +13,20 @@ import com.codepath.imagesearch.Model.ImageSetting;
 import com.codepath.imagesearch.R;
 
 public class ImageSettings extends ActionBarActivity {
+    private ImageSetting settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_settings);
+        settings = (ImageSetting)getIntent().getSerializableExtra("settings");
+        EditText type = (EditText) findViewById(R.id.EtvType);
+        EditText colour = (EditText) findViewById(R.id.Etvcolour);
+        EditText size = (EditText) findViewById(R.id.EtvSize);
+        EditText site = (EditText) findViewById(R.id.EtvSite);
+        type.setText(settings.getImageType());
+        colour.setText(settings.getColour());
+        size.setText(settings.getSize());
+        site.setText(settings.getSite());
     }
 
     public void saveSetting(View view) {
