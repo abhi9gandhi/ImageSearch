@@ -12,4 +12,4 @@ Advanced: Improve the user interface and experiment with image assets and/or sty
 Bonus: Use the StaggeredGridView to display improve the grid of image results
 Bonus: User can zoom or pan images displayed in full-screen detail view
 
-![alt tag](https://github.com/abhi9gandhi/InstagramImageViewer/blob/master/ImageViewer.gif)
+![alt tag](https://github.com/abhi9gandhi/ImageSearch/blob/master/ImageSearch.gif)
