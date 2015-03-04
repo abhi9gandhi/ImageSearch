@@ -1,0 +1,135 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="25dp"
+    tools:context="com.codepath.imagesearch.SettingsFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.codepath.imagesearch.Activity.ImageSettings"
+        android:id="@+id/ImageSettingLinearLayout"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:id="@+id/Lfirst">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type:"
+                android:id="@+id/TvType"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/EtvType"
+                android:layout_centerVertical="true"
+                android:inputType="textFilter"
+                android:lines="1"
+                android:maxLines="1"
+                android:hint="(faces, photo, clip art, line art)" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:id="@+id/LSecond"
+            android:layout_below="@+id/Lfirst">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Colour:"
+                android:id="@+id/TvColour"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Etvcolour"
+                android:layout_gravity="center_vertical"
+                android:editable="true"
+                android:elegantTextHeight="true"
+                android:hint="(black, blue, brown, gray, green, etc...)"
+                android:inputType="textFilter"
+                android:lines="1"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:id="@+id/LThird"
+            android:layout_below="@+id/LSecond">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Size:"
+                android:id="@+id/TvSize"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/EtvSize"
+                android:layout_below="@+id/TvType"
+                android:layout_gravity="center_vertical"
+                android:inputType="textFilter"
+                android:lines="1"
+                android:maxLines="1"
+                android:hint="(small, medium, large, extra-large)" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:id="@+id/Lfourth"
+            android:layout_below="@+id/LThird">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Site:"
+                android:id="@+id/TvSite"
+                android:layout_below="@+id/TvSize"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/EtvSite"
+                android:layout_gravity="center_vertical"
+                android:inputType="textFilter"
+                android:lines="1"
+                android:maxLines="1"
+                android:hint="(espn.com)" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Settings"
+            android:id="@+id/BSettings"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</FrameLayout>

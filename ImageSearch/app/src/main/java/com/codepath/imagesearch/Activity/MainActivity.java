@@ -10,6 +10,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -29,6 +32,7 @@ import com.codepath.imagesearch.Model.ImagePage;
 import com.codepath.imagesearch.Model.ImageResult;
 import com.codepath.imagesearch.Model.ImageSetting;
 import com.codepath.imagesearch.R;
+import com.codepath.imagesearch.SettingsFragment;
 import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -45,7 +49,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SettingsFragment.EditNameDialogListener {
     private ArrayList<ImageResult> ImageResultArray;
     private ImageResult result;
     private ArrayList<ImagePage> apage;
@@ -258,6 +262,20 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        Bundle args = new Bundle();
+        args.putSerializable("settings", settings);
+        SettingsFragment settingsFrag = SettingsFragment.newInstance(settings);
+        settingsFrag.show(fm, "fragment_edit_name");
+    }
+
+
+    public void onFinishEditDialog(ImageSetting setting) {
+        this.settings = setting;
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -267,10 +285,12 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent i = new Intent(MainActivity.this,ImageSettings.class);
+        //    Intent i = new Intent(MainActivity.this,ImageSettings.class);
             aresult.clear();
-            i.putExtra("settings",settings);
-            startActivityForResult(i, 1);
+       //     i.putExtra("settings",settings);
+        //    startActivityForResult(i, 1);
+            showEditDialog();
+
 
             return true;
         }
